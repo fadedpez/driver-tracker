@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/fadedpez/driver-tracker/internal/handlers"
 	"github.com/fadedpez/driver-tracker/protos"
 	"github.com/spf13/cobra"
@@ -14,8 +15,8 @@ var serverCommand = &cobra.Command{
 	Short: "Run the gRPC server",
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Print("starting server")
-		port := "5000"
-		lis, err := net.Listen("tcp", port)
+		port := 5000
+		lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", port))
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
 		}
@@ -32,4 +33,8 @@ var serverCommand = &cobra.Command{
 			log.Fatalf("failed to serve: %v", err)
 		}
 	},
+}
+
+func init() {
+	rootCommand.AddCommand(serverCommand)
 }

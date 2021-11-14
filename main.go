@@ -1,4 +1,4 @@
-package driver_tracker
+package main
 
 import "github.com/fadedpez/driver-tracker/cmd"
 
