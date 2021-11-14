@@ -16,5 +16,16 @@ func TestNewDriver(t *testing.T) {
 		assert.NotNil(t, err)
 		assert.Equal(t, expError, err)
 	})
+	t.Run("it requires a first name", func(t *testing.T) {
+		actual, err := NewDriver(&DriverConfig{
+			FirstName: "",
+			LastName: "ferguson",
+		})
 
+		expError := errors.New("missing FirstName")
+
+		assert.Nil(t, actual)
+		assert.NotNil(t, err)
+		assert.Equal(t, expError, err)
+	})
 }
