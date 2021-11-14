@@ -43,7 +43,6 @@ func (c *driverTrackerAPIClient) StoreDriver(ctx context.Context, in *StoreDrive
 // for forward compatibility
 type DriverTrackerAPIServer interface {
 	StoreDriver(context.Context, *StoreDriverRequest) (*StoreDriverResponse, error)
-	mustEmbedUnimplementedDriverTrackerAPIServer()
 }
 
 // UnimplementedDriverTrackerAPIServer must be embedded to have forward compatible implementations.

@@ -1,5 +1,7 @@
 package driver_tracker
 
-func main() {
+import "github.com/fadedpez/driver-tracker/cmd"
 
+func main() {
+	cmd.Execute()
 }

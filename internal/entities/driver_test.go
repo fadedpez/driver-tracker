@@ -10,7 +10,7 @@ func TestNewDriver(t *testing.T) {
 	t.Run("it requires a config", func(t *testing.T) {
 		actual, err := NewDriver(nil)
 
-		expError := errors.New("Missing DriverConfig")
+		expError := errors.New("missing DriverConfig")
 
 		assert.Nil(t, actual)
 		assert.NotNil(t, err)
@@ -19,7 +19,7 @@ func TestNewDriver(t *testing.T) {
 	t.Run("it requires a first name", func(t *testing.T) {
 		actual, err := NewDriver(&DriverConfig{
 			FirstName: "",
-			LastName: "ferguson",
+			LastName:  "ferguson",
 		})
 
 		expError := errors.New("missing FirstName")
