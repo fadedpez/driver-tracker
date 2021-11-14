@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package = "github.com/dammitbilly0ne/driver-tracker/protos/gen/go/drivertrackerapialpha;protos";
+
+package drivertracker.api.alpha;
+
+service DriverTrackerAPI {
+	rpc StoreDriver(StoreDriverRequest) returns (StoreDriverResponse);
+}
+
+message StoreDriverRequest {
+	string nameLast = 1;
+	string nameFirst = 2;
+	string driverNumber = 3;
+	string driverNationality = 4;
+}
+
+message StoreDriverResponse {
+	Driver driver = 1;
+}
+
+message Driver{
+	string id = 1;
+	string nameLast = 2;
+	string nameFirst = 3;
+	string driverNumber = 4;
+	string driverNationality = 5;
+}
