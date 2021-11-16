@@ -9,8 +9,13 @@ import (
 )
 
 const (
-	requiredConfig = "config is required"
-	requiredRepo   = "repo is required"
+	requiredConfig       = "config is required"
+	requiredRepo         = "repo is required"
+	mockDriverCreateFail = "mock driver create failed"
+	driverFirstName      = "driver first name is required"
+	driverLastName       = "driver last name is required"
+	driverNumber         = "driver number is required"
+	driverNationality    = "driver nationality is required"
 )
 
 type Alpha struct {

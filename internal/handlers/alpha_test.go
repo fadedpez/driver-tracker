@@ -55,7 +55,7 @@ func TestAlpha_StoreDriver(t *testing.T) {
 		handler := setupFixture()
 		m := handler.repo.(*drivers.MockRepo)
 
-		expErr := errors.New("mock create driver fail")
+		expErr := errors.New(mockDriverCreateFail)
 
 		m.On("CreateDriver", mock.Anything).Return(nil, expErr)
 
@@ -74,10 +74,51 @@ func TestAlpha_StoreDriver(t *testing.T) {
 	t.Run("it requires a first name", func(t *testing.T) {
 		handler := setupFixture()
 
-		expErr := errors.New("first name is required")
+		expErr := errors.New(driverFirstName)
 
 		actual, err := handler.StoreDriver(context.Background(), &protos.StoreDriverRequest{
 			NameFirst: "",
+		})
+
+		assert.Nil(t, actual)
+		assert.NotNil(t, err)
+		assert.Equal(t, expErr, err)
+	})
+
+	t.Run("it requires a last name", func(t *testing.T) {
+		handler := setupFixture()
+
+		expErr := errors.New(driverLastName)
+		actual, err := handler.StoreDriver(context.Background(), &protos.StoreDriverRequest{
+			NameLast: "",
+		})
+
+		assert.Nil(t, actual)
+		assert.NotNil(t, err)
+		assert.Equal(t, expErr, err)
+	})
+
+	t.Run("it requires a driver number", func(t *testing.T) {
+		handler := setupFixture()
+
+		expErr := errors.New(driverNumber)
+
+		actual, err := handler.StoreDriver(context.Background(), &protos.StoreDriverRequest{
+			DriverNumber: "",
+		})
+
+		assert.Nil(t, actual)
+		assert.NotNil(t, err)
+		assert.Equal(t, expErr, err)
+	})
+
+	t.Run("it requires a driver nationality", func(t *testing.T) {
+		handler := setupFixture()
+
+		expErr := errors.New(driverNationality)
+
+		actual, err := handler.StoreDriver(context.Background(), &protos.StoreDriverRequest{
+			DriverNationality: "",
 		})
 
 		assert.Nil(t, actual)
