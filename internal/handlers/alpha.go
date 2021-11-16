@@ -16,6 +16,7 @@ const (
 	driverLastName       = "driver last name is required"
 	driverNumber         = "driver number is required"
 	driverNationality    = "driver nationality is required"
+	requiredReq          = "req is required"
 )
 
 type Alpha struct {
@@ -41,23 +42,40 @@ func NewAlpha(cfg *AlphaConfig) (*Alpha, error) {
 
 func (a *Alpha) StoreDriver(ctx context.Context, req *protos.StoreDriverRequest) (*protos.StoreDriverResponse, error) {
 	if req == nil {
-		return nil, errors.New("req is required")
+		return nil, errors.New(requiredReq)
 	}
 
 	if req.NameFirst == "" {
-		return nil, errors.New("first name is required")
+		return nil, errors.New(driverFirstName)
+	}
+
+	if req.NameLast == "" {
+		return nil, errors.New(driverLastName)
+	}
+
+	if req.DriverNumber == "" {
+		return nil, errors.New(driverNumber)
+	}
+
+	if req.DriverNationality == "" {
+		return nil, errors.New(driverNationality)
 	}
 
 	driver, err := a.repo.CreateDriver(&entities.Driver{
-		FirstName: req.NameFirst,
-		LastName:  req.NameLast,
+		FirstName:         req.NameFirst,
+		LastName:          req.NameLast,
+		DriverNumber:      req.DriverNumber,
+		DriverNationality: req.DriverNationality,
 	})
 	if err != nil {
 		return nil, err
 	}
 	return &protos.StoreDriverResponse{
 		Driver: &protos.Driver{
-			NameFirst: driver.FirstName,
-			NameLast:  driver.LastName},
+			NameFirst:         driver.FirstName,
+			NameLast:          driver.LastName,
+			DriverNumber:      driver.DriverNumber,
+			DriverNationality: driver.DriverNationality,
+		},
 	}, nil
 }

@@ -90,7 +90,8 @@ func TestAlpha_StoreDriver(t *testing.T) {
 
 		expErr := errors.New(driverLastName)
 		actual, err := handler.StoreDriver(context.Background(), &protos.StoreDriverRequest{
-			NameLast: "",
+			NameFirst: "Stan",
+			NameLast:  "",
 		})
 
 		assert.Nil(t, actual)
@@ -104,6 +105,8 @@ func TestAlpha_StoreDriver(t *testing.T) {
 		expErr := errors.New(driverNumber)
 
 		actual, err := handler.StoreDriver(context.Background(), &protos.StoreDriverRequest{
+			NameFirst:    "Stan",
+			NameLast:     "Daniel",
 			DriverNumber: "",
 		})
 
@@ -118,6 +121,9 @@ func TestAlpha_StoreDriver(t *testing.T) {
 		expErr := errors.New(driverNationality)
 
 		actual, err := handler.StoreDriver(context.Background(), &protos.StoreDriverRequest{
+			NameFirst:         "Stan",
+			NameLast:          "Daniel",
+			DriverNumber:      "13",
 			DriverNationality: "",
 		})
 
