@@ -10,4 +10,5 @@ type Driver struct {
 	DriverNumber      string `json:"driver_number"`
 	DriverNationality string `json:"driver_nationality"`
 	dob               *time.Time
+	ID                string `json:"id"`
 }

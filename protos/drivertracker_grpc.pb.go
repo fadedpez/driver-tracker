@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type DriverTrackerAPIClient interface {
 	StoreDriver(ctx context.Context, in *StoreDriverRequest, opts ...grpc.CallOption) (*StoreDriverResponse, error)
 	StoreTeam(ctx context.Context, in *StoreTeamRequest, opts ...grpc.CallOption) (*StoreTeamResponse, error)
+	GetTeamByName(ctx context.Context, in *GetTeamByNameRequest, opts ...grpc.CallOption) (*GetTeamByNameResponse, error)
 }
 
 type driverTrackerAPIClient struct {
@@ -48,13 +49,22 @@ func (c *driverTrackerAPIClient) StoreTeam(ctx context.Context, in *StoreTeamReq
 	return out, nil
 }
 
+func (c *driverTrackerAPIClient) GetTeamByName(ctx context.Context, in *GetTeamByNameRequest, opts ...grpc.CallOption) (*GetTeamByNameResponse, error) {
+	out := new(GetTeamByNameResponse)
+	err := c.cc.Invoke(ctx, "/drivertracker.api.alpha.DriverTrackerAPI/GetTeamByName", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DriverTrackerAPIServer is the server API for DriverTrackerAPI service.
 // All implementations must embed UnimplementedDriverTrackerAPIServer
 // for forward compatibility
 type DriverTrackerAPIServer interface {
 	StoreDriver(context.Context, *StoreDriverRequest) (*StoreDriverResponse, error)
 	StoreTeam(context.Context, *StoreTeamRequest) (*StoreTeamResponse, error)
-	mustEmbedUnimplementedDriverTrackerAPIServer()
+	GetTeamByName(context.Context, *GetTeamByNameRequest) (*GetTeamByNameResponse, error)
 }
 
 // UnimplementedDriverTrackerAPIServer must be embedded to have forward compatible implementations.
@@ -66,6 +76,9 @@ func (UnimplementedDriverTrackerAPIServer) StoreDriver(context.Context, *StoreDr
 }
 func (UnimplementedDriverTrackerAPIServer) StoreTeam(context.Context, *StoreTeamRequest) (*StoreTeamResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StoreTeam not implemented")
+}
+func (UnimplementedDriverTrackerAPIServer) GetTeamByName(context.Context, *GetTeamByNameRequest) (*GetTeamByNameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTeamByName not implemented")
 }
 func (UnimplementedDriverTrackerAPIServer) mustEmbedUnimplementedDriverTrackerAPIServer() {}
 
@@ -116,6 +129,24 @@ func _DriverTrackerAPI_StoreTeam_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DriverTrackerAPI_GetTeamByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTeamByNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DriverTrackerAPIServer).GetTeamByName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/drivertracker.api.alpha.DriverTrackerAPI/GetTeamByName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DriverTrackerAPIServer).GetTeamByName(ctx, req.(*GetTeamByNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DriverTrackerAPI_ServiceDesc is the grpc.ServiceDesc for DriverTrackerAPI service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -130,6 +161,10 @@ var DriverTrackerAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "StoreTeam",
 			Handler:    _DriverTrackerAPI_StoreTeam_Handler,
+		},
+		{
+			MethodName: "GetTeamByName",
+			Handler:    _DriverTrackerAPI_GetTeamByName_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

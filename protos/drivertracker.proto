@@ -7,6 +7,7 @@ package drivertracker.api.alpha;
 service DriverTrackerAPI {
 	rpc StoreDriver(StoreDriverRequest) returns (StoreDriverResponse);
 	rpc StoreTeam(StoreTeamRequest) returns (StoreTeamResponse);
+	rpc GetTeamByName(GetTeamByNameRequest) returns (GetTeamByNameResponse);
 }
 
 message StoreDriverRequest {
@@ -47,4 +48,12 @@ message Team {
     string teamPrincipal = 4;
     string teamEstablishedYear = 5;
     string teamYearsActive = 6;
+}
+
+message GetTeamByNameRequest {
+    string teamName = 1;
+}
+
+message GetTeamByNameResponse {
+    Team team = 1;
 }
