@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"errors"
+
 	"github.com/fadedpez/driver-tracker/internal/entities"
 	"github.com/fadedpez/driver-tracker/internal/repositories/drivers"
 	"github.com/fadedpez/driver-tracker/internal/repositories/teams"
@@ -23,15 +24,12 @@ const (
 	teamNationality      = "team nationality is required"
 	teamPrincipal        = "team principal is required"
 	teamEstablished      = "team established year is required"
+	teamNotFound         = "team not found"
 )
 
 type Alpha struct {
 	driverRepo drivers.Repository
 	teamRepo   teams.Repository
-}
-
-func (a *Alpha) GetTeamByName(ctx context.Context, request *protos.GetTeamByNameRequest) (*protos.GetTeamByNameResponse, error) {
-	return nil, errors.New("implement me")
 }
 
 type AlphaConfig struct {
@@ -137,4 +135,28 @@ func (a *Alpha) StoreTeam(ctx context.Context, req *protos.StoreTeamRequest) (*p
 			Id:                  team.ID,
 		},
 	}, nil
+}
+
+func (a *Alpha) GetTeamByName(ctx context.Context, req *protos.GetTeamByNameRequest) (*protos.GetTeamByNameResponse, error) {
+	if req == nil {
+		return nil, errors.New(requiredReq)
+	}
+
+	if req.TeamName == "" {
+		return nil, errors.New(teamName)
+	}
+
+	team, err := a.teamRepo.GetTeamByName(req.TeamName)
+	if err != nil {
+		return nil, err
+	}
+
+	return &protos.GetTeamByNameResponse{
+		Team: &protos.Team{
+			Id:                  team.ID,
+			TeamName:            team.TeamName,
+			TeamNationality:     team.TeamNationality,
+			TeamPrincipal:       team.TeamPrincipal,
+			TeamEstablishedYear: team.TeamEstablishedYear,
+		}}, nil
 }

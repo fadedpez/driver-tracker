@@ -3,13 +3,14 @@ package handlers
 import (
 	"context"
 	"errors"
+	"testing"
+
 	"github.com/fadedpez/driver-tracker/internal/entities"
 	"github.com/fadedpez/driver-tracker/internal/repositories/drivers"
 	"github.com/fadedpez/driver-tracker/internal/repositories/teams"
 	"github.com/fadedpez/driver-tracker/protos"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"testing"
 )
 
 func setupFixture() *Alpha {
@@ -295,4 +296,55 @@ func TestAlpha_StoreTeam(t *testing.T) {
 		assert.Equal(t, expErr, err)
 	})
 
+}
+
+func TestAlpha_GetTeamByName(t *testing.T) {
+	t.Run("it can get the team by name", func(t *testing.T) {
+		handler := setupFixture()
+		m := handler.teamRepo.(*teams.MockRepo)
+
+		retTeam := &entities.Team{
+			TeamName:            "beer camp",
+			TeamNationality:     "USA",
+			TeamPrincipal:       "mongo",
+			TeamEstablishedYear: "2015",
+			ID:                  "0",
+		}
+
+		m.On("GetTeamByName", retTeam.TeamName).Return(retTeam, nil)
+
+		actual, err := handler.GetTeamByName(context.Background(), &protos.GetTeamByNameRequest{
+			TeamName: "beer camp",
+		})
+
+		assert.Nil(t, err)
+		assert.NotNil(t, actual)
+		assert.Equal(t, &protos.GetTeamByNameResponse{
+			Team: &protos.Team{
+				TeamName:            retTeam.TeamName,
+				TeamNationality:     retTeam.TeamNationality,
+				TeamPrincipal:       retTeam.TeamPrincipal,
+				TeamEstablishedYear: retTeam.TeamEstablishedYear,
+				Id:                  retTeam.ID,
+			},
+		}, actual)
+	})
+
+	t.Run("it returns an error when the repo errors", func(t *testing.T) {
+		handler := setupFixture()
+		m := handler.teamRepo.(*teams.MockRepo)
+
+		testTeamName := "camp beer"
+		expError := errors.New(teamNotFound)
+
+		m.On("GetTeamByName", testTeamName).Return(nil, expError)
+
+		actual, err := handler.GetTeamByName(context.Background(), &protos.GetTeamByNameRequest{
+			TeamName: testTeamName,
+		})
+
+		assert.Nil(t, actual)
+		assert.NotNil(t, err)
+		assert.Equal(t, expError, err)
+	})
 }

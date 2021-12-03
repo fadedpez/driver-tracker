@@ -47,7 +47,6 @@ message Team {
     string teamNationality = 3;
     string teamPrincipal = 4;
     string teamEstablishedYear = 5;
-    string teamYearsActive = 6;
 }
 
 message GetTeamByNameRequest {
