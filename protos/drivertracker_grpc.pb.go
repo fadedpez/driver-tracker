@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type DriverTrackerAPIClient interface {
 	StoreDriver(ctx context.Context, in *StoreDriverRequest, opts ...grpc.CallOption) (*StoreDriverResponse, error)
 	StoreTeam(ctx context.Context, in *StoreTeamRequest, opts ...grpc.CallOption) (*StoreTeamResponse, error)
-	GetTeamByName(ctx context.Context, in *GetTeamByNameRequest, opts ...grpc.CallOption) (*GetTeamByNameResponse, error)
+	SearchTeamByName(ctx context.Context, in *SearchTeamByNameRequest, opts ...grpc.CallOption) (*SearchTeamByNameResponse, error)
 }
 
 type driverTrackerAPIClient struct {
@@ -49,9 +49,9 @@ func (c *driverTrackerAPIClient) StoreTeam(ctx context.Context, in *StoreTeamReq
 	return out, nil
 }
 
-func (c *driverTrackerAPIClient) GetTeamByName(ctx context.Context, in *GetTeamByNameRequest, opts ...grpc.CallOption) (*GetTeamByNameResponse, error) {
-	out := new(GetTeamByNameResponse)
-	err := c.cc.Invoke(ctx, "/drivertracker.api.alpha.DriverTrackerAPI/GetTeamByName", in, out, opts...)
+func (c *driverTrackerAPIClient) SearchTeamByName(ctx context.Context, in *SearchTeamByNameRequest, opts ...grpc.CallOption) (*SearchTeamByNameResponse, error) {
+	out := new(SearchTeamByNameResponse)
+	err := c.cc.Invoke(ctx, "/drivertracker.api.alpha.DriverTrackerAPI/SearchTeamByName", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,8 @@ func (c *driverTrackerAPIClient) GetTeamByName(ctx context.Context, in *GetTeamB
 type DriverTrackerAPIServer interface {
 	StoreDriver(context.Context, *StoreDriverRequest) (*StoreDriverResponse, error)
 	StoreTeam(context.Context, *StoreTeamRequest) (*StoreTeamResponse, error)
-	GetTeamByName(context.Context, *GetTeamByNameRequest) (*GetTeamByNameResponse, error)
+	SearchTeamByName(context.Context, *SearchTeamByNameRequest) (*SearchTeamByNameResponse, error)
+	mustEmbedUnimplementedDriverTrackerAPIServer()
 }
 
 // UnimplementedDriverTrackerAPIServer must be embedded to have forward compatible implementations.
@@ -77,8 +78,8 @@ func (UnimplementedDriverTrackerAPIServer) StoreDriver(context.Context, *StoreDr
 func (UnimplementedDriverTrackerAPIServer) StoreTeam(context.Context, *StoreTeamRequest) (*StoreTeamResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StoreTeam not implemented")
 }
-func (UnimplementedDriverTrackerAPIServer) GetTeamByName(context.Context, *GetTeamByNameRequest) (*GetTeamByNameResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTeamByName not implemented")
+func (UnimplementedDriverTrackerAPIServer) SearchTeamByName(context.Context, *SearchTeamByNameRequest) (*SearchTeamByNameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchTeamByName not implemented")
 }
 func (UnimplementedDriverTrackerAPIServer) mustEmbedUnimplementedDriverTrackerAPIServer() {}
 
@@ -129,20 +130,20 @@ func _DriverTrackerAPI_StoreTeam_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DriverTrackerAPI_GetTeamByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTeamByNameRequest)
+func _DriverTrackerAPI_SearchTeamByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchTeamByNameRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DriverTrackerAPIServer).GetTeamByName(ctx, in)
+		return srv.(DriverTrackerAPIServer).SearchTeamByName(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/drivertracker.api.alpha.DriverTrackerAPI/GetTeamByName",
+		FullMethod: "/drivertracker.api.alpha.DriverTrackerAPI/SearchTeamByName",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DriverTrackerAPIServer).GetTeamByName(ctx, req.(*GetTeamByNameRequest))
+		return srv.(DriverTrackerAPIServer).SearchTeamByName(ctx, req.(*SearchTeamByNameRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -163,8 +164,8 @@ var DriverTrackerAPI_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _DriverTrackerAPI_StoreTeam_Handler,
 		},
 		{
-			MethodName: "GetTeamByName",
-			Handler:    _DriverTrackerAPI_GetTeamByName_Handler,
+			MethodName: "SearchTeamByName",
+			Handler:    _DriverTrackerAPI_SearchTeamByName_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -127,17 +127,11 @@ func (a *Alpha) StoreTeam(ctx context.Context, req *protos.StoreTeamRequest) (*p
 		return nil, err
 	}
 	return &protos.StoreTeamResponse{
-		Team: &protos.Team{
-			TeamName:            team.TeamName,
-			TeamNationality:     team.TeamNationality,
-			TeamPrincipal:       team.TeamPrincipal,
-			TeamEstablishedYear: team.TeamEstablishedYear,
-			Id:                  team.ID,
-		},
+		Team: teamToProto(team),
 	}, nil
 }
 
-func (a *Alpha) GetTeamByName(ctx context.Context, req *protos.GetTeamByNameRequest) (*protos.GetTeamByNameResponse, error) {
+func (a *Alpha) SearchTeamByName(ctx context.Context, req *protos.SearchTeamByNameRequest) (*protos.SearchTeamByNameResponse, error) {
 	if req == nil {
 		return nil, errors.New(requiredReq)
 	}
@@ -146,17 +140,40 @@ func (a *Alpha) GetTeamByName(ctx context.Context, req *protos.GetTeamByNameRequ
 		return nil, errors.New(teamName)
 	}
 
-	team, err := a.teamRepo.GetTeamByName(req.TeamName)
+	team, err := a.teamRepo.SearchTeamByName(req.TeamName)
 	if err != nil {
 		return nil, err
 	}
 
-	return &protos.GetTeamByNameResponse{
-		Team: &protos.Team{
-			Id:                  team.ID,
-			TeamName:            team.TeamName,
-			TeamNationality:     team.TeamNationality,
-			TeamPrincipal:       team.TeamPrincipal,
-			TeamEstablishedYear: team.TeamEstablishedYear,
-		}}, nil
+	return &protos.SearchTeamByNameResponse{
+		Teams: teamsToProtos(team),
+	}, nil
+}
+
+func teamToProto(team *entities.Team) *protos.Team {
+	if team == nil {
+		return nil
+	}
+
+	return &protos.Team{
+		Id:                  team.ID,
+		TeamName:            team.TeamName,
+		TeamNationality:     team.TeamNationality,
+		TeamPrincipal:       team.TeamPrincipal,
+		TeamEstablishedYear: team.TeamEstablishedYear,
+	}
+}
+
+func teamsToProtos(teams []*entities.Team) []*protos.Team {
+	if teams == nil {
+		return nil
+	}
+
+	output := make([]*protos.Team, 0)
+
+	for _, team := range teams {
+		output = append(output, teamToProto(team))
+	}
+
+	return output
 }

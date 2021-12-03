@@ -108,6 +108,7 @@ func TestAlpha_StoreDriver(t *testing.T) {
 				Id:                retDriver.ID,
 			},
 		}, actual)
+		m.AssertExpectations(t)
 	})
 
 	t.Run("it returns an error when the driverRepo errors", func(t *testing.T) {
@@ -128,6 +129,7 @@ func TestAlpha_StoreDriver(t *testing.T) {
 		assert.Nil(t, actual)
 		assert.NotNil(t, err)
 		assert.Equal(t, expErr, err)
+		m.AssertExpectations(t)
 	})
 
 	t.Run("it requires a first name", func(t *testing.T) {
@@ -232,6 +234,7 @@ func TestAlpha_StoreTeam(t *testing.T) {
 				Id:                  retTeam.ID,
 			},
 		}, actual)
+		m.AssertExpectations(t)
 	})
 
 	t.Run("it requires a team name", func(t *testing.T) {
@@ -299,7 +302,7 @@ func TestAlpha_StoreTeam(t *testing.T) {
 }
 
 func TestAlpha_GetTeamByName(t *testing.T) {
-	t.Run("it can get the team by name", func(t *testing.T) {
+	t.Run("it can search the team by name", func(t *testing.T) {
 		handler := setupFixture()
 		m := handler.teamRepo.(*teams.MockRepo)
 
@@ -311,23 +314,26 @@ func TestAlpha_GetTeamByName(t *testing.T) {
 			ID:                  "0",
 		}
 
-		m.On("GetTeamByName", retTeam.TeamName).Return(retTeam, nil)
+		m.On("SearchTeamByName", retTeam.TeamName).Return([]*entities.Team{
+			retTeam,
+		}, nil)
 
-		actual, err := handler.GetTeamByName(context.Background(), &protos.GetTeamByNameRequest{
+		actual, err := handler.SearchTeamByName(context.Background(), &protos.SearchTeamByNameRequest{
 			TeamName: "beer camp",
 		})
 
 		assert.Nil(t, err)
 		assert.NotNil(t, actual)
-		assert.Equal(t, &protos.GetTeamByNameResponse{
-			Team: &protos.Team{
+		assert.Equal(t, &protos.SearchTeamByNameResponse{
+			Teams: []*protos.Team{{
 				TeamName:            retTeam.TeamName,
 				TeamNationality:     retTeam.TeamNationality,
 				TeamPrincipal:       retTeam.TeamPrincipal,
 				TeamEstablishedYear: retTeam.TeamEstablishedYear,
 				Id:                  retTeam.ID,
-			},
+			}},
 		}, actual)
+		m.AssertExpectations(t)
 	})
 
 	t.Run("it returns an error when the repo errors", func(t *testing.T) {
@@ -337,14 +343,15 @@ func TestAlpha_GetTeamByName(t *testing.T) {
 		testTeamName := "camp beer"
 		expError := errors.New(teamNotFound)
 
-		m.On("GetTeamByName", testTeamName).Return(nil, expError)
+		m.On("SearchTeamByName", testTeamName).Return(nil, expError)
 
-		actual, err := handler.GetTeamByName(context.Background(), &protos.GetTeamByNameRequest{
+		actual, err := handler.SearchTeamByName(context.Background(), &protos.SearchTeamByNameRequest{
 			TeamName: testTeamName,
 		})
 
 		assert.Nil(t, actual)
 		assert.NotNil(t, err)
 		assert.Equal(t, expError, err)
+		m.AssertExpectations(t)
 	})
 }
