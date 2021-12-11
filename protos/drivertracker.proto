@@ -8,6 +8,7 @@ service DriverTrackerAPI {
 	rpc StoreDriver(StoreDriverRequest) returns (StoreDriverResponse);
 	rpc StoreTeam(StoreTeamRequest) returns (StoreTeamResponse);
 	rpc SearchTeamByName(SearchTeamByNameRequest) returns (SearchTeamByNameResponse);
+  rpc GetTeam(GetTeamRequest) returns (GetTeamResponse);
 }
 
 message StoreDriverRequest {
@@ -55,4 +56,12 @@ message SearchTeamByNameRequest {
 
 message SearchTeamByNameResponse {
     repeated Team teams = 1;
+}
+
+message GetTeamRequest {
+  string teamID = 1;
+}
+
+message GetTeamResponse {
+  Team team = 1;
 }

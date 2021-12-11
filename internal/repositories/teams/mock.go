@@ -26,3 +26,12 @@ func (m *MockRepo) SearchTeamByName(name string) ([]*entities.Team, error) {
 
 	return args.Get(0).([]*entities.Team), nil
 }
+
+func (m *MockRepo) GetTeam(name string) (*entities.Team, error) {
+	args := m.Called(name)
+	if args.Error(1) != nil {
+		return nil, args.Error(1)
+	}
+
+	return args.Get(0).(*entities.Team), nil
+}

@@ -25,6 +25,7 @@ const (
 	teamPrincipal        = "team principal is required"
 	teamEstablished      = "team established year is required"
 	teamNotFound         = "team not found"
+	teamIDNotFound       = "team ID not found"
 )
 
 type Alpha struct {
@@ -176,4 +177,24 @@ func teamsToProtos(teams []*entities.Team) []*protos.Team {
 	}
 
 	return output
+}
+
+func (a *Alpha) GetTeam(ctx context.Context, req *protos.GetTeamRequest) (*protos.GetTeamResponse, error) {
+	if req == nil {
+		return nil, errors.New(requiredReq)
+	}
+
+	if req.TeamID == "" {
+		return nil, errors.New(teamIDNotFound)
+	}
+
+	team, err := a.teamRepo.GetTeam(req.TeamID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &protos.GetTeamResponse{
+		Team: teamToProto(team),
+	}, nil
+
 }
