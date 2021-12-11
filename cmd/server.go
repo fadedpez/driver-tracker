@@ -2,12 +2,16 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	"net"
+
+	"github.com/fadedpez/driver-tracker/internal/repositories/drivers"
+	"github.com/fadedpez/driver-tracker/internal/repositories/teams"
+
 	"github.com/fadedpez/driver-tracker/internal/handlers"
 	"github.com/fadedpez/driver-tracker/protos"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
-	"log"
-	"net"
 )
 
 var serverCommand = &cobra.Command{
@@ -21,9 +25,12 @@ var serverCommand = &cobra.Command{
 			log.Fatalf("failed to listen: %v", err)
 		}
 		s := grpc.NewServer()
-		handler, err := handlers.NewAlpha(&handlers.AlphaConfig{})
+		handler, err := handlers.NewAlpha(&handlers.AlphaConfig{
+			DriverRepo: &drivers.MockRepo{},
+			TeamRepo:   &teams.MockRepo{},
+		})
 		if err != nil {
-			log.Fatal("err returned from handlers.NewAlpha()")
+			log.Fatal("err returned from handlers.NewAlpha()", err)
 		}
 
 		protos.RegisterDriverTrackerAPIServer(s, handler)
