@@ -4,6 +4,7 @@ package protos
 
 import (
 	context "context"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -76,7 +77,6 @@ type DriverTrackerAPIServer interface {
 	StoreTeam(context.Context, *StoreTeamRequest) (*StoreTeamResponse, error)
 	SearchTeamByName(context.Context, *SearchTeamByNameRequest) (*SearchTeamByNameResponse, error)
 	GetTeam(context.Context, *GetTeamRequest) (*GetTeamResponse, error)
-	mustEmbedUnimplementedDriverTrackerAPIServer()
 }
 
 // UnimplementedDriverTrackerAPIServer must be embedded to have forward compatible implementations.
