@@ -301,7 +301,7 @@ func TestAlpha_StoreTeam(t *testing.T) {
 
 }
 
-func TestAlpha_GetTeamByName(t *testing.T) {
+func TestAlpha_SearchTeamByName(t *testing.T) {
 	t.Run("it can search the team by name", func(t *testing.T) {
 		handler := setupFixture()
 		m := handler.teamRepo.(*teams.MockRepo)
@@ -353,5 +353,59 @@ func TestAlpha_GetTeamByName(t *testing.T) {
 		assert.NotNil(t, err)
 		assert.Equal(t, expError, err)
 		m.AssertExpectations(t)
+	})
+}
+
+func (a *Alpha) Test_GetTeam(t testing.T) {
+	t.Run("it can return a team based on the given team ID", func(t *testing.T) {
+		handler := setupFixture()
+		m := handler.teamRepo.(*teams.MockRepo)
+
+		retTeam := &entities.Team{
+			TeamName:            "beer camp",
+			TeamNationality:     "USA",
+			TeamPrincipal:       "mongo",
+			TeamEstablishedYear: "2015",
+			ID:                  "0",
+		}
+
+		m.On("GetTeam", retTeam.ID).Return(retTeam, nil)
+
+		actual, err := handler.GetTeam(context.Background(), &protos.GetTeamRequest{
+			TeamID: "0",
+		})
+
+		assert.Nil(t, err)
+		assert.NotNil(t, actual)
+		assert.Equal(t, &protos.GetTeamResponse{
+			Team: &protos.Team{
+				TeamName:            retTeam.TeamName,
+				TeamNationality:     retTeam.TeamNationality,
+				TeamPrincipal:       retTeam.TeamPrincipal,
+				TeamEstablishedYear: retTeam.TeamEstablishedYear,
+				Id:                  retTeam.ID,
+			},
+		}, actual)
+		m.AssertExpectations(t)
+	})
+
+	t.Run("it returns an error when the repo errors", func(t *testing.T) {
+		handler := setupFixture()
+		m := handler.teamRepo.(*teams.MockRepo)
+
+		testTeamID := "1"
+		expError := errors.New(teamNotFound)
+
+		m.On("GetTeam", testTeamID).Return(nil, expError)
+
+		actual, err := handler.GetTeam(context.Background(), &protos.GetTeamRequest{
+			TeamID: testTeamID,
+		})
+
+		assert.Nil(t, actual)
+		assert.NotNil(t, err)
+		assert.Equal(t, expError, err)
+		m.AssertExpectations(t)
+
 	})
 }
