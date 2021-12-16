@@ -1,13 +1,12 @@
-package drivers
+package teams
 
 import (
 	"context"
 	"errors"
 
-	"github.com/fadedpez/driver-tracker/internal/common"
-
 	"github.com/KirkDiggler/go-projects/dynamo"
 	"github.com/KirkDiggler/go-projects/dynamo/inputs/putitem"
+	"github.com/fadedpez/driver-tracker/internal/common"
 	"github.com/fadedpez/driver-tracker/internal/entities"
 )
 
@@ -42,18 +41,18 @@ func NewDynamo(cfg *DynamoConfig) (*Dynamo, error) {
 	}, nil
 }
 
-func (r *Dynamo) CreateDriver(driver *entities.Driver) (*entities.Driver, error) {
-	if driver == nil {
-		return nil, errors.New("driver repository requires a driver")
+func (r *Dynamo) CreateTeam(team *entities.Team) (*entities.Team, error) {
+	if team == nil {
+		return nil, errors.New("team repository requires a team")
 	}
 
-	driver.ID = r.uuidGenerator.New()
+	team.ID = r.uuidGenerator.New()
 
 	_, err := r.client.PutItem(context.Background(), r.tableName,
-		putitem.WithEntity(driver))
+		putitem.WithEntity(team))
 	if err != nil {
 		return nil, err
 	}
 
-	return driver, nil
+	return team, nil
 }

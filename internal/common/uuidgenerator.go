@@ -1,4 +1,4 @@
-package drivers
+package common
 
 import (
 	"github.com/google/uuid"
@@ -11,11 +11,11 @@ func (u *UUIDGenerator) New() string {
 	return uuid.New().String()
 }
 
-type mockUUIDGenerator struct {
+type MockUUIDGenerator struct {
 	mock.Mock
 }
 
-func (m *mockUUIDGenerator) New() string {
+func (m *MockUUIDGenerator) New() string {
 	args := m.Called()
 
 	return args.Get(0).(string)
