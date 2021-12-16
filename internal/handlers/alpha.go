@@ -151,20 +151,6 @@ func (a *Alpha) SearchTeamByName(ctx context.Context, req *protos.SearchTeamByNa
 	}, nil
 }
 
-func teamToProto(team *entities.Team) *protos.Team {
-	if team == nil {
-		return nil
-	}
-
-	return &protos.Team{
-		Id:                  team.ID,
-		TeamName:            team.TeamName,
-		TeamNationality:     team.TeamNationality,
-		TeamPrincipal:       team.TeamPrincipal,
-		TeamEstablishedYear: team.TeamEstablishedYear,
-	}
-}
-
 func teamsToProtos(teams []*entities.Team) []*protos.Team {
 	if teams == nil {
 		return nil
@@ -197,4 +183,18 @@ func (a *Alpha) GetTeam(ctx context.Context, req *protos.GetTeamRequest) (*proto
 		Team: teamToProto(team),
 	}, nil
 
+}
+
+func teamToProto(team *entities.Team) *protos.Team {
+	if team == nil {
+		return nil
+	}
+
+	return &protos.Team{
+		Id:                  team.ID,
+		TeamName:            team.TeamName,
+		TeamNationality:     team.TeamNationality,
+		TeamPrincipal:       team.TeamPrincipal,
+		TeamEstablishedYear: team.TeamEstablishedYear,
+	}
 }

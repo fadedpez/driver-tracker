@@ -1,7 +1,11 @@
 package teams
 
 import (
+	"context"
 	"testing"
+
+	"github.com/KirkDiggler/go-projects/dynamo/inputs/getitem"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 
 	"github.com/KirkDiggler/go-projects/dynamo"
 	"github.com/KirkDiggler/go-projects/dynamo/inputs/putitem"
@@ -17,6 +21,33 @@ func setupFixture() *Dynamo {
 		tableName:     "test_table",
 		uuidGenerator: &common.MockUUIDGenerator{},
 	}
+}
+
+func TestDynamo_GetTeam(t *testing.T) {
+	t.Run("it calls the client properly", func(t *testing.T) {
+		repo := setupFixture()
+		m := repo.client.(*dynamo.Mock)
+
+		ctx := context.Background()
+		testID := "efgh"
+		options := getitem.NewOptions(getitem.WithKey(map[string]types.AttributeValue{
+			"id": &types.AttributeValueMemberS{Value: testID},
+		}))
+
+		m.On("GetItem", ctx, "test_table", options).Return(&getitem.Result{
+			Item: map[string]types.AttributeValue{
+				"id":       &types.AttributeValueMemberS{Value: testID},
+				"TeamName": &types.AttributeValueMemberS{Value: "testID"}, //TODO: Add rest of struct for the test
+			},
+		}, nil)
+
+		actual, err := repo.GetTeam(ctx, testID)
+
+		assert.Nil(t, err)
+		assert.NotNil(t, actual)
+		assert.Equal(t, testID, actual.ID)
+		assert.Equal(t, "testID", actual.TeamName)
+	})
 }
 
 func TestDynamo_CreateTeam(t *testing.T) {
