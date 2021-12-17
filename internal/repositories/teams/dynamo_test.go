@@ -36,8 +36,11 @@ func TestDynamo_GetTeam(t *testing.T) {
 
 		m.On("GetItem", ctx, "test_table", options).Return(&getitem.Result{
 			Item: map[string]types.AttributeValue{
-				"id":       &types.AttributeValueMemberS{Value: testID},
-				"TeamName": &types.AttributeValueMemberS{Value: "testID"}, //TODO: Add rest of struct for the test
+				"id":                  &types.AttributeValueMemberS{Value: testID},      //the keys need to match the struct in team.go
+				"TeamName":            &types.AttributeValueMemberS{Value: "beer camp"}, //key matching struct is not case sensitive, I matched for consistency
+				"TeamNationality":     &types.AttributeValueMemberS{Value: "USA"},
+				"TeamPrincipal":       &types.AttributeValueMemberS{Value: "mongo"},
+				"TeamEstablishedYear": &types.AttributeValueMemberS{Value: "2015"},
 			},
 		}, nil)
 
@@ -46,7 +49,11 @@ func TestDynamo_GetTeam(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotNil(t, actual)
 		assert.Equal(t, testID, actual.ID)
-		assert.Equal(t, "testID", actual.TeamName)
+		assert.Equal(t, "beer camp", actual.TeamName)
+		assert.Equal(t, "USA", actual.TeamNationality)
+		assert.Equal(t, "mongo", actual.TeamPrincipal)
+		assert.Equal(t, "2015", actual.TeamEstablishedYear)
+
 	})
 }
 
