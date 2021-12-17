@@ -1,7 +1,11 @@
 package drivers
 
 import (
+	"context"
 	"testing"
+
+	"github.com/KirkDiggler/go-projects/dynamo/inputs/getitem"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 
 	"github.com/fadedpez/driver-tracker/internal/common"
 
@@ -18,6 +22,40 @@ func setupFixture() *Dynamo {
 		tableName:     "test_table", //TODO: move to constant later
 		uuidGenerator: &common.MockUUIDGenerator{},
 	}
+}
+
+func TestDynamo_GetDriver(t *testing.T) {
+	t.Run("it calls the client properly", func(t *testing.T) {
+		repo := setupFixture()
+		m := repo.client.(*dynamo.Mock)
+
+		ctx := context.Background()
+		testID := "abcd"
+		options := getitem.NewOptions(getitem.WithKey(map[string]types.AttributeValue{
+			"id": &types.AttributeValueMemberS{Value: testID},
+		}))
+
+		m.On("GetItem", ctx, "test_table", options).Return(&getitem.Result{
+			Item: map[string]types.AttributeValue{
+				"id":                &types.AttributeValueMemberS{Value: testID},
+				"FirstName":         &types.AttributeValueMemberS{Value: "kirk"},
+				"LastName":          &types.AttributeValueMemberS{Value: "diggler"},
+				"DriverNumber":      &types.AttributeValueMemberS{Value: "42"},
+				"DriverNationality": &types.AttributeValueMemberS{Value: "USA"},
+			},
+		}, nil)
+
+		actual, err := repo.GetDriver(ctx, testID)
+
+		assert.Nil(t, err)
+		assert.NotNil(t, actual)
+		assert.Equal(t, testID, actual.ID)
+		assert.Equal(t, "kirk", actual.FirstName)
+		assert.Equal(t, "diggler", actual.LastName)
+		assert.Equal(t, "42", actual.DriverNumber)
+		assert.Equal(t, "USA", actual.DriverNationality)
+
+	})
 }
 
 func TestDynamo_CreateDriver(t *testing.T) {

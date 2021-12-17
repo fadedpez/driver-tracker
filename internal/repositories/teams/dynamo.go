@@ -13,6 +13,14 @@ import (
 	"github.com/fadedpez/driver-tracker/internal/entities"
 )
 
+const (
+	configRequired    = "a config is required"
+	clientRequired    = "a client is required"
+	tableNameRequired = "a valid table name is required"
+	teamRepoRequired  = "a team repository is required"
+	teamIDEmpty       = "retrieved team ID is empty"
+)
+
 type Dynamo struct {
 	client        dynamo.Interface
 	tableName     string
@@ -26,15 +34,15 @@ type DynamoConfig struct {
 
 func NewDynamo(cfg *DynamoConfig) (*Dynamo, error) {
 	if cfg == nil {
-		return nil, errors.New("a config is required") //TODO: turn the strings into variables
+		return nil, errors.New(configRequired)
 	}
 
 	if cfg.Client == nil {
-		return nil, errors.New("a client is required")
+		return nil, errors.New(clientRequired)
 	}
 
 	if len(cfg.TableName) < 3 {
-		return nil, errors.New("a valid table name is required")
+		return nil, errors.New(tableNameRequired)
 	}
 
 	return &Dynamo{
@@ -46,7 +54,7 @@ func NewDynamo(cfg *DynamoConfig) (*Dynamo, error) {
 
 func (r *Dynamo) CreateTeam(team *entities.Team) (*entities.Team, error) {
 	if team == nil {
-		return nil, errors.New("team repository requires a team")
+		return nil, errors.New(teamRepoRequired)
 	}
 
 	team.ID = r.uuidGenerator.New()
@@ -62,7 +70,7 @@ func (r *Dynamo) CreateTeam(team *entities.Team) (*entities.Team, error) {
 
 func (r *Dynamo) GetTeam(ctx context.Context, teamID string) (*entities.Team, error) {
 	if teamID == "" {
-		return nil, errors.New("retrieved team ID is empty")
+		return nil, errors.New(teamIDEmpty)
 	}
 
 	result, err := r.client.GetItem(ctx, r.tableName,
