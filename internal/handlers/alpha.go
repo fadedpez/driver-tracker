@@ -78,10 +78,10 @@ func (a *Alpha) StoreDriver(ctx context.Context, req *protos.StoreDriverRequest)
 	}
 
 	driver, err := a.driverRepo.CreateDriver(&entities.Driver{
-		FirstName:         req.NameFirst,
-		LastName:          req.NameLast,
-		DriverNumber:      req.DriverNumber,
-		DriverNationality: req.DriverNationality,
+		FirstName:   req.NameFirst,
+		LastName:    req.NameLast,
+		Number:      req.DriverNumber,
+		Nationality: req.DriverNationality,
 	})
 	if err != nil {
 		return nil, err
@@ -90,8 +90,8 @@ func (a *Alpha) StoreDriver(ctx context.Context, req *protos.StoreDriverRequest)
 		Driver: &protos.Driver{
 			NameFirst:         driver.FirstName,
 			NameLast:          driver.LastName,
-			DriverNumber:      driver.DriverNumber,
-			DriverNationality: driver.DriverNationality,
+			DriverNumber:      driver.Number,
+			DriverNationality: driver.Nationality,
 			Id:                driver.ID,
 		},
 	}, nil
@@ -119,10 +119,10 @@ func (a *Alpha) StoreTeam(ctx context.Context, req *protos.StoreTeamRequest) (*p
 	}
 
 	team, err := a.teamRepo.CreateTeam(&entities.Team{
-		TeamName:            req.TeamName,
-		TeamNationality:     req.TeamNationality,
-		TeamPrincipal:       req.TeamPrincipal,
-		TeamEstablishedYear: req.TeamEstablishedYear,
+		Name:            req.TeamName,
+		Nationality:     req.TeamNationality,
+		Principal:       req.TeamPrincipal,
+		EstablishedYear: req.TeamEstablishedYear,
 	})
 	if err != nil {
 		return nil, err
@@ -192,12 +192,16 @@ func teamToProto(team *entities.Team) *protos.Team {
 
 	return &protos.Team{
 		Id:                  team.ID,
-		TeamName:            team.TeamName,
-		TeamNationality:     team.TeamNationality,
-		TeamPrincipal:       team.TeamPrincipal,
-		TeamEstablishedYear: team.TeamEstablishedYear,
+		TeamName:            team.Name,
+		TeamNationality:     team.Nationality,
+		TeamPrincipal:       team.Principal,
+		TeamEstablishedYear: team.EstablishedYear,
 	}
 }
+
+//TODO: fill out the functions below this comment!
+
+//TODO: Probably have to create (x)ToProto / (x)ToProtos for Driver, GrandPrix, Quali, Round, Season, Track
 
 func (a *Alpha) GetDriver(ctx context.Context, req *protos.GetDriverRequest) (*protos.GetDriverResponse, error) {
 	return nil, errors.New("not yet implemented")

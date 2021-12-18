@@ -74,18 +74,18 @@ func TestAlpha_StoreDriver(t *testing.T) {
 		m := handler.driverRepo.(*drivers.MockRepo)
 
 		expDriver := &entities.Driver{
-			FirstName:         "kirk",
-			LastName:          "diggler",
-			DriverNumber:      "1",
-			DriverNationality: "USA",
+			FirstName:   "kirk",
+			LastName:    "diggler",
+			Number:      "1",
+			Nationality: "USA",
 		}
 
 		retDriver := &entities.Driver{
-			FirstName:         "kirk",
-			LastName:          "diggler",
-			DriverNumber:      "1",
-			DriverNationality: "USA",
-			ID:                "0",
+			FirstName:   "kirk",
+			LastName:    "diggler",
+			Number:      "1",
+			Nationality: "USA",
+			ID:          "0",
 		}
 
 		m.On("CreateDriver", expDriver).Return(retDriver, nil)
@@ -103,8 +103,8 @@ func TestAlpha_StoreDriver(t *testing.T) {
 			Driver: &protos.Driver{
 				NameLast:          retDriver.LastName,
 				NameFirst:         retDriver.FirstName,
-				DriverNumber:      retDriver.DriverNumber,
-				DriverNationality: retDriver.DriverNationality,
+				DriverNumber:      retDriver.Number,
+				DriverNationality: retDriver.Nationality,
 				Id:                retDriver.ID,
 			},
 		}, actual)
@@ -200,18 +200,18 @@ func TestAlpha_StoreTeam(t *testing.T) {
 		m := handler.teamRepo.(*teams.MockRepo)
 
 		expTeam := &entities.Team{
-			TeamName:            "beer camp",
-			TeamNationality:     "USA",
-			TeamPrincipal:       "mongo",
-			TeamEstablishedYear: "2015",
+			Name:            "beer camp",
+			Nationality:     "USA",
+			Principal:       "mongo",
+			EstablishedYear: "2015",
 		}
 
 		retTeam := &entities.Team{
-			TeamName:            "beer camp",
-			TeamNationality:     "USA",
-			TeamPrincipal:       "mongo",
-			TeamEstablishedYear: "2015",
-			ID:                  "0",
+			Name:            "beer camp",
+			Nationality:     "USA",
+			Principal:       "mongo",
+			EstablishedYear: "2015",
+			ID:              "0",
 		}
 
 		m.On("CreateTeam", expTeam).Return(retTeam, nil)
@@ -227,10 +227,10 @@ func TestAlpha_StoreTeam(t *testing.T) {
 		assert.NotNil(t, actual)
 		assert.Equal(t, &protos.StoreTeamResponse{
 			Team: &protos.Team{
-				TeamName:            retTeam.TeamName,
-				TeamNationality:     retTeam.TeamNationality,
-				TeamPrincipal:       retTeam.TeamPrincipal,
-				TeamEstablishedYear: retTeam.TeamEstablishedYear,
+				TeamName:            retTeam.Name,
+				TeamNationality:     retTeam.Nationality,
+				TeamPrincipal:       retTeam.Principal,
+				TeamEstablishedYear: retTeam.EstablishedYear,
 				Id:                  retTeam.ID,
 			},
 		}, actual)
@@ -307,14 +307,14 @@ func TestAlpha_SearchTeamByName(t *testing.T) {
 		m := handler.teamRepo.(*teams.MockRepo)
 
 		retTeam := &entities.Team{
-			TeamName:            "beer camp",
-			TeamNationality:     "USA",
-			TeamPrincipal:       "mongo",
-			TeamEstablishedYear: "2015",
-			ID:                  "0",
+			Name:            "beer camp",
+			Nationality:     "USA",
+			Principal:       "mongo",
+			EstablishedYear: "2015",
+			ID:              "0",
 		}
 
-		m.On("SearchTeamByName", retTeam.TeamName).Return([]*entities.Team{
+		m.On("SearchTeamByName", retTeam.Name).Return([]*entities.Team{
 			retTeam,
 		}, nil)
 
@@ -326,10 +326,10 @@ func TestAlpha_SearchTeamByName(t *testing.T) {
 		assert.NotNil(t, actual)
 		assert.Equal(t, &protos.SearchTeamByNameResponse{
 			Teams: []*protos.Team{{
-				TeamName:            retTeam.TeamName,
-				TeamNationality:     retTeam.TeamNationality,
-				TeamPrincipal:       retTeam.TeamPrincipal,
-				TeamEstablishedYear: retTeam.TeamEstablishedYear,
+				TeamName:            retTeam.Name,
+				TeamNationality:     retTeam.Nationality,
+				TeamPrincipal:       retTeam.Principal,
+				TeamEstablishedYear: retTeam.EstablishedYear,
 				Id:                  retTeam.ID,
 			}},
 		}, actual)
@@ -362,11 +362,11 @@ func (a *Alpha) Test_GetTeam(t testing.T) {
 		m := handler.teamRepo.(*teams.MockRepo)
 
 		retTeam := &entities.Team{
-			TeamName:            "beer camp",
-			TeamNationality:     "USA",
-			TeamPrincipal:       "mongo",
-			TeamEstablishedYear: "2015",
-			ID:                  "0",
+			Name:            "beer camp",
+			Nationality:     "USA",
+			Principal:       "mongo",
+			EstablishedYear: "2015",
+			ID:              "0",
 		}
 
 		m.On("GetTeam", retTeam.ID).Return(retTeam, nil)
@@ -379,10 +379,10 @@ func (a *Alpha) Test_GetTeam(t testing.T) {
 		assert.NotNil(t, actual)
 		assert.Equal(t, &protos.GetTeamResponse{
 			Team: &protos.Team{
-				TeamName:            retTeam.TeamName,
-				TeamNationality:     retTeam.TeamNationality,
-				TeamPrincipal:       retTeam.TeamPrincipal,
-				TeamEstablishedYear: retTeam.TeamEstablishedYear,
+				TeamName:            retTeam.Name,
+				TeamNationality:     retTeam.Nationality,
+				TeamPrincipal:       retTeam.Principal,
+				TeamEstablishedYear: retTeam.EstablishedYear,
 				Id:                  retTeam.ID,
 			},
 		}, actual)
@@ -409,3 +409,5 @@ func (a *Alpha) Test_GetTeam(t testing.T) {
 
 	})
 }
+
+//TODO: create requisite tests for driver, gp, quali, round, season, track as alpha.go completion progresses

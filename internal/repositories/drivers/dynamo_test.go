@@ -37,11 +37,11 @@ func TestDynamo_GetDriver(t *testing.T) {
 
 		m.On("GetItem", ctx, "test_table", options).Return(&getitem.Result{
 			Item: map[string]types.AttributeValue{
-				"id":                &types.AttributeValueMemberS{Value: testID},
-				"FirstName":         &types.AttributeValueMemberS{Value: "kirk"},
-				"LastName":          &types.AttributeValueMemberS{Value: "diggler"},
-				"DriverNumber":      &types.AttributeValueMemberS{Value: "42"},
-				"DriverNationality": &types.AttributeValueMemberS{Value: "USA"},
+				"id":          &types.AttributeValueMemberS{Value: testID},
+				"FirstName":   &types.AttributeValueMemberS{Value: "kirk"},
+				"LastName":    &types.AttributeValueMemberS{Value: "diggler"},
+				"Number":      &types.AttributeValueMemberS{Value: "42"},
+				"Nationality": &types.AttributeValueMemberS{Value: "USA"},
 			},
 		}, nil)
 
@@ -52,8 +52,8 @@ func TestDynamo_GetDriver(t *testing.T) {
 		assert.Equal(t, testID, actual.ID)
 		assert.Equal(t, "kirk", actual.FirstName)
 		assert.Equal(t, "diggler", actual.LastName)
-		assert.Equal(t, "42", actual.DriverNumber)
-		assert.Equal(t, "USA", actual.DriverNationality)
+		assert.Equal(t, "42", actual.Number)
+		assert.Equal(t, "USA", actual.Nationality)
 
 	})
 }
@@ -66,11 +66,11 @@ func TestDynamo_CreateDriver(t *testing.T) {
 		muuid := repo.uuidGenerator.(*common.MockUUIDGenerator)
 
 		inputDriver := &entities.Driver{
-			FirstName:         "kirk",
-			LastName:          "diggler",
-			DriverNumber:      "12",
-			DriverNationality: "USA",
-			ID:                "abcd",
+			FirstName:   "kirk",
+			LastName:    "diggler",
+			Number:      "12",
+			Nationality: "USA",
+			ID:          "abcd",
 		}
 
 		muuid.On("New").Return("abcd")
@@ -80,10 +80,10 @@ func TestDynamo_CreateDriver(t *testing.T) {
 		m.On("PutItem", mock.Anything, "test_table", options).Return(&putitem.Result{}, nil)
 
 		actual, err := repo.CreateDriver(&entities.Driver{
-			FirstName:         "kirk",
-			LastName:          "diggler",
-			DriverNumber:      "12",
-			DriverNationality: "USA",
+			FirstName:   "kirk",
+			LastName:    "diggler",
+			Number:      "12",
+			Nationality: "USA",
 		})
 
 		assert.Nil(t, err)
