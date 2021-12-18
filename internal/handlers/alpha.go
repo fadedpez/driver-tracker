@@ -198,3 +198,71 @@ func teamToProto(team *entities.Team) *protos.Team {
 		TeamEstablishedYear: team.TeamEstablishedYear,
 	}
 }
+
+func (a *Alpha) GetDriver(ctx context.Context, req *protos.GetDriverRequest) (*protos.GetDriverResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) SearchDriver(ctx context.Context, req *protos.SearchDriverRequest) (*protos.GetDriverResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) StoreGrandPrix(ctx context.Context, req *protos.StoreGrandPrixRequest) (*protos.StoreGrandPrixResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) GetGrandPrix(ctx context.Context, req *protos.GetGrandPrixRequest) (*protos.GetGrandPrixResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) SearchGrandPrix(ctx context.Context, req *protos.SearchGrandPrixRequest) (*protos.GetGrandPrixResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) StoreQualifying(ctx context.Context, req *protos.StoreQualifyingRequest) (*protos.StoreQualifyingResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) GetQualifying(ctx context.Context, req *protos.GetQualifyingRequest) (*protos.GetQualifyingResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) SearchQualifying(ctx context.Context, req *protos.SearchQualifyingRequest) (*protos.SearchQualifyingResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) StoreRound(ctx context.Context, req *protos.StoreRoundRequest) (*protos.StoreRoundResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) GetRound(ctx context.Context, req *protos.GetRoundRequest) (*protos.GetRoundResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) SearchRound(ctx context.Context, req *protos.SearchRoundRequest) (*protos.SearchRoundResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) StoreSeason(ctx context.Context, req *protos.StoreSeasonRequest) (*protos.StoreTeamResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) GetSeason(ctx context.Context, req *protos.GetTeamRequest) (*protos.GetTeamResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) SearchSeason(ctx context.Context, req *protos.SearchSeasonRequest) (*protos.SearchSeasonResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) StoreTrack(ctx context.Context, req *protos.StoreTrackRequest) (*protos.StoreTrackResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) GetTrack(ctx context.Context, req *protos.GetTrackRequest) (*protos.StoreTrackResponse, error) {
+	return nil, errors.New("not yet implemented")
+}
+
+func (a *Alpha) SearchTrack(ctx context.Context, req *protos.SearchTrackRequest) (*protos.SearchTrackResponse, error) {
+	return nil, errors.New("not yet implemented")
+}

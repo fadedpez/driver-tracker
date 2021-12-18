@@ -6,9 +6,34 @@ package drivertracker.api.alpha;
 
 service DriverTrackerAPI {
 	rpc StoreDriver(StoreDriverRequest) returns (StoreDriverResponse);
+  rpc GetDriver(GetDriverRequest) returns (GetDriverResponse);
+  rpc SearchDriver(SearchDriverRequest) returns (SearchDriverResponse);
 	rpc StoreTeam(StoreTeamRequest) returns (StoreTeamResponse);
 	rpc SearchTeamByName(SearchTeamByNameRequest) returns (SearchTeamByNameResponse);
   rpc GetTeam(GetTeamRequest) returns (GetTeamResponse);
+  rpc StoreGrandPrix(StoreGrandPrixRequest) returns (StoreGrandPrixResponse);
+  rpc GetGrandPrix(GetGrandPrixRequest) returns (GetGrandPrixResponse);
+  rpc SearchGrandPrix(SearchGrandPrixRequest) returns (SearchGrandPrixResponse);
+  rpc StoreQualifying(StoreQualifyingRequest) returns (StoreQualifyingResponse);
+  rpc GetQualifying(GetQualifyingRequest) returns (GetQualifyingResponse);
+  rpc SearchQualifying(SearchQualifyingRequest) returns (SearchQualifyingResponse);
+  rpc StoreTrack(StoreTrackRequest) returns (StoreTrackResponse);
+  rpc GetTrack(GetTrackRequest) returns (GetTrackResponse);
+  rpc SearchTrack(SearchTrackRequest) returns (SearchTrackResponse);
+  rpc StoreRound(StoreRoundRequest) returns (StoreRoundResponse);
+  rpc GetRound(GetRoundRequest) returns (GetRoundResponse);
+  rpc SearchRound(SearchRoundRequest) returns (SearchRoundResponse);
+  rpc StoreSeason(StoreSeasonRequest) returns (StoreSeasonResponse);
+  rpc GetSeason(GetSeasonRequest) returns (GetSeasonResponse);
+  rpc SearchSeason(SearchSeasonRequest) returns (SearchSeasonResponse);
+}
+
+message Driver {
+  string id = 1;
+  string nameLast = 2;
+  string nameFirst = 3;
+  string driverNumber = 4;
+  string driverNationality = 5;
 }
 
 message StoreDriverRequest {
@@ -22,12 +47,28 @@ message StoreDriverResponse {
 	Driver driver = 1;
 }
 
-message Driver {
-	string id = 1;
-	string nameLast = 2;
-	string nameFirst = 3;
-	string driverNumber = 4;
-	string driverNationality = 5;
+message GetDriverRequest {
+  string id = 1;
+}
+
+message GetDriverResponse {
+  Driver driver = 1;
+}
+
+message SearchDriverRequest {
+  string lastName = 1;
+}
+
+message SearchDriverResponse {
+  repeated Driver drivers = 1;
+}
+
+message Team {
+  string id = 1;
+  string teamName = 2;
+  string teamNationality = 3;
+  string teamPrincipal = 4;
+  string teamEstablishedYear = 5;
 }
 
 message StoreTeamRequest {
@@ -40,14 +81,6 @@ message StoreTeamRequest {
 
 message StoreTeamResponse {
     Team team = 1;
-}
-
-message Team {
-    string id = 1;
-    string teamName = 2;
-    string teamNationality = 3;
-    string teamPrincipal = 4;
-    string teamEstablishedYear = 5;
 }
 
 message SearchTeamByNameRequest {
@@ -64,4 +97,212 @@ message GetTeamRequest {
 
 message GetTeamResponse {
   Team team = 1;
+}
+
+message GrandPrixParticipant {
+  string id = 1;
+  repeated Driver grandPrixParticipant = 2;
+  string startPosition = 3;
+  string finishPosition = 4;
+  string pointsEarned = 5;
+  string raceTime = 6;
+  string fastestLap = 7;
+  string gridPenalty = 8;
+  string timePenalty = 9;
+  string stopGoPenalty = 10;
+}
+
+message GrandPrix {
+  string id = 1;
+  string grandPrixName = 2;
+  string grandPrixTrack = 3;
+  string grandPrixDate = 4;
+  repeated GrandPrixParticipant grandPrixParticipants = 5;
+}
+
+message StoreGrandPrixRequest {
+  string grandPrixName = 1;
+  string grandPrixTrack = 2;
+  string grandPrixDate = 3;
+  repeated GrandPrixParticipant grandPrixParticipants = 4;
+}
+
+message StoreGrandPrixResponse {
+  GrandPrix grandPrix = 1;
+}
+
+message GetGrandPrixRequest {
+  string grandPrixID = 1;
+}
+
+message GetGrandPrixResponse {
+  GrandPrix grandPrix = 1;
+}
+
+message SearchGrandPrixRequest {
+  string grandPrixName = 1; // Can I put more strings as valid inputs or are those separate funcs?
+}
+
+message SearchGrandPrixResponse {
+  repeated GrandPrix grandPrixs = 1;
+}
+
+message QualifyingParticipant {
+  string id = 1;
+  repeated Driver grandPrixParticipant = 2;
+  string qualifiedPosition = 3;
+  string fastestLap = 4;
+  string startTireChoice = 5;
+  string bestRoundCompleted = 6;
+}
+
+message Qualifying {
+  string id = 1;
+  string qualifyingGrandPrixName = 2;
+  string qualifyingGrandPrixTrack = 3;
+  string qualifyingDate = 4;
+  repeated QualifyingParticipant qualifyingParticipants = 5;
+}
+
+message StoreQualifyingRequest {
+  string qualifyingGrandPrixName = 1;
+  string qualifyingGrandPrixTrack = 2;
+  string qualifyingDate = 3;
+  repeated QualifyingParticipant qualifyingParticipants = 4;
+}
+
+message StoreQualifyingResponse {
+  Qualifying qualifying = 1;
+}
+
+message GetQualifyingRequest {
+  string qualifyingID = 1;
+}
+
+message GetQualifyingResponse {
+  Qualifying qualifying = 1;
+}
+
+message SearchQualifyingRequest {
+  string qualifyingGrandPrixName = 1;
+}
+
+message SearchQualifyingResponse {
+  repeated Qualifying qualifyings = 1;
+}
+
+message Track {
+  string id = 1;
+  string trackName = 2;
+  string trackCountry = 3;
+  string lapDistance = 4;
+  string lapCount = 5;
+  string leftTurnCount = 6;
+  string rightTurnCount = 7;
+  string drsZoneCount = 8;
+  string totalElevationChange = 9;
+}
+
+message StoreTrackRequest {
+  string trackName = 1;
+  string trackCountry = 2;
+  string lapDistance = 3;
+  string lapCount = 4;
+  string leftTurnCount = 5;
+  string rightTurnCount = 6;
+  string drsZoneCount = 7;
+  string totalElevationChange = 8;
+}
+
+message StoreTrackResponse {
+  Track track = 1;
+}
+
+message GetTrackRequest {
+  string id = 1;
+}
+
+message GetTrackResponse {
+  Track track = 1;
+}
+
+message SearchTrackRequest {
+  string trackCountry = 1;
+}
+
+message SearchTrackResponse {
+  repeated Track tracks = 1;
+}
+
+message Round {
+  string id = 1;
+  string roundNumber = 2;
+  string roundDate = 3;
+  string roundYear = 4;
+  Track track = 5;
+  Qualifying qualifying = 6;
+  GrandPrix grandPrix = 7;
+}
+
+message StoreRoundRequest {
+  string roundNumber = 1;
+  string roundDate = 2;
+  Track track = 3;
+  Qualifying qualifying = 4;
+  GrandPrix grandPrix = 5;
+}
+
+message StoreRoundResponse {
+  Round round = 1;
+}
+
+message GetRoundRequest {
+  string id = 1;
+}
+
+message GetRoundResponse {
+  Round round = 1;
+}
+
+message SearchRoundRequest {
+  string roundNumber = 1;
+}
+
+message SearchRoundResponse {
+  repeated Round rounds = 1;
+}
+
+message Season {
+  string id = 1;
+  string seasonYear = 2;
+  repeated Round round = 3;
+  repeated Team team = 4;
+  repeated GrandPrixParticipant grandPrixParticipant = 5;
+}
+
+message StoreSeasonRequest {
+  string seasonYear = 1;
+  repeated Round round = 2;
+  repeated Team team = 4;
+  repeated GrandPrixParticipant grandPrixParticipant = 5;
+}
+
+message StoreSeasonResponse {
+  Season season = 1;
+}
+
+message GetSeasonRequest {
+  string id = 1;
+}
+
+message GetSeasonResponse {
+  Season season = 1;
+}
+
+message SearchSeasonRequest {
+  string seasonYear = 1;
+}
+
+message SearchSeasonResponse {
+  repeated Season seasons = 1;
 }
