@@ -90,7 +90,7 @@ AWS_ENDPOINT=http://localhost:8000 AWS_REGION=us-east-1 DELETE_EXISTING=true dyn
 }
 
 func init() {
-	rootCmd.AddCommand(cabraCmd)
+	rootCommand.AddCommand(cabraCmd)
 
 	cabraCmd.Flags().StringP("endpoint", "e", "", "Dynamo endpoint")
 	_ = viper.BindPFlag("cabra.endpoint", cabraCmd.Flags().Lookup("endpoint"))

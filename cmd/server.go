@@ -9,7 +9,6 @@ import (
 	"github.com/fadedpez/driver-tracker/internal/repositories/teams"
 
 	"github.com/fadedpez/driver-tracker/internal/handlers"
-	"github.com/fadedpez/driver-tracker/protos"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 )
@@ -25,7 +24,7 @@ var serverCommand = &cobra.Command{
 			log.Fatalf("failed to listen: %v", err)
 		}
 		s := grpc.NewServer()
-		handler, err := handlers.NewAlpha(&handlers.AlphaConfig{
+		_, err = handlers.NewAlpha(&handlers.AlphaConfig{
 			DriverRepo: &drivers.MockRepo{},
 			TeamRepo:   &teams.MockRepo{},
 		})
@@ -33,7 +32,7 @@ var serverCommand = &cobra.Command{
 			log.Fatal("err returned from handlers.NewAlpha()", err)
 		}
 
-		protos.RegisterDriverTrackerAPIServer(s, handler)
+		//protos.RegisterDriverTrackerAPIServer(s, handler)
 
 		log.Printf("server listening at %v", lis.Addr())
 		if err := s.Serve(lis); err != nil {
