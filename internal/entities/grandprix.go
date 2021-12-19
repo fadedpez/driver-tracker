@@ -8,7 +8,7 @@ import (
 
 //The goal here is to pull in all drivers that participated in the GrandPrix. It is possible for this list to be different than the Qualifying drivers (not common).
 // A set of drivers belongs to a grand prix
-// Teams belong to a grand prix too? I dunno man!
+// Teams belong to a grand prix too? Teams get constructor points based on the points their drivers earn. That should be stored and gotten in a round/season.
 //TODO: A Grand Prix should have result showing driver finishing classification, total times, fatest lap, and points earned.
 
 type GrandPrix struct {

@@ -5,6 +5,8 @@ import (
 	"log"
 	"net"
 
+	"github.com/fadedpez/driver-tracker/protos"
+
 	"github.com/fadedpez/driver-tracker/internal/repositories/drivers"
 	"github.com/fadedpez/driver-tracker/internal/repositories/teams"
 
@@ -24,15 +26,23 @@ var serverCommand = &cobra.Command{
 			log.Fatalf("failed to listen: %v", err)
 		}
 		s := grpc.NewServer()
-		_, err = handlers.NewAlpha(&handlers.AlphaConfig{
-			DriverRepo: &drivers.MockRepo{},
+		repo, err := drivers.NewDynamo(&drivers.DynamoConfig{
+			Client:    newDynamoClient(),
+			TableName: "driver-tracker-local-Divers",
+		})
+		if err != nil {
+			log.Fatal("drivers.new dynamo, shit broke without red squigglies. ", err)
+		}
+
+		handler, err := handlers.NewAlpha(&handlers.AlphaConfig{
+			DriverRepo: repo,
 			TeamRepo:   &teams.MockRepo{},
 		})
 		if err != nil {
 			log.Fatal("err returned from handlers.NewAlpha()", err)
 		}
 
-		//protos.RegisterDriverTrackerAPIServer(s, handler)
+		protos.RegisterDriverTrackerAPIServer(s, handler)
 
 		log.Printf("server listening at %v", lis.Addr())
 		if err := s.Serve(lis); err != nil {

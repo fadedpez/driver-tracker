@@ -207,7 +207,7 @@ func (a *Alpha) GetDriver(ctx context.Context, req *protos.GetDriverRequest) (*p
 	return nil, errors.New("not yet implemented")
 }
 
-func (a *Alpha) SearchDriver(ctx context.Context, req *protos.SearchDriverRequest) (*protos.GetDriverResponse, error) {
+func (a *Alpha) SearchDriver(ctx context.Context, req *protos.SearchDriverRequest) (*protos.SearchDriverResponse, error) {
 	return nil, errors.New("not yet implemented")
 }
 
@@ -219,7 +219,7 @@ func (a *Alpha) GetGrandPrix(ctx context.Context, req *protos.GetGrandPrixReques
 	return nil, errors.New("not yet implemented")
 }
 
-func (a *Alpha) SearchGrandPrix(ctx context.Context, req *protos.SearchGrandPrixRequest) (*protos.GetGrandPrixResponse, error) {
+func (a *Alpha) SearchGrandPrix(ctx context.Context, req *protos.SearchGrandPrixRequest) (*protos.SearchGrandPrixResponse, error) {
 	return nil, errors.New("not yet implemented")
 }
 
@@ -247,11 +247,11 @@ func (a *Alpha) SearchRound(ctx context.Context, req *protos.SearchRoundRequest)
 	return nil, errors.New("not yet implemented")
 }
 
-func (a *Alpha) StoreSeason(ctx context.Context, req *protos.StoreSeasonRequest) (*protos.StoreTeamResponse, error) {
+func (a *Alpha) StoreSeason(ctx context.Context, req *protos.StoreSeasonRequest) (*protos.StoreSeasonResponse, error) {
 	return nil, errors.New("not yet implemented")
 }
 
-func (a *Alpha) GetSeason(ctx context.Context, req *protos.GetTeamRequest) (*protos.GetTeamResponse, error) {
+func (a *Alpha) GetSeason(ctx context.Context, req *protos.GetSeasonRequest) (*protos.GetSeasonResponse, error) {
 	return nil, errors.New("not yet implemented")
 }
 
@@ -263,7 +263,7 @@ func (a *Alpha) StoreTrack(ctx context.Context, req *protos.StoreTrackRequest) (
 	return nil, errors.New("not yet implemented")
 }
 
-func (a *Alpha) GetTrack(ctx context.Context, req *protos.GetTrackRequest) (*protos.StoreTrackResponse, error) {
+func (a *Alpha) GetTrack(ctx context.Context, req *protos.GetTrackRequest) (*protos.GetTrackResponse, error) {
 	return nil, errors.New("not yet implemented")
 }
 
