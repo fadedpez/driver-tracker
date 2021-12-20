@@ -14,7 +14,8 @@ var testCommand = &cobra.Command{
 	Short: "Run the gRPC server",
 
 	Run: func(comd *cobra.Command, args []string) {
-		conn, err := grpc.Dial("127.0.0.1:5000")
+		conn, err := grpc.Dial("localhost:5000",
+			grpc.WithInsecure())
 		if err != nil {
 			log.Fatal("err returned from grpc.Dial")
 		}

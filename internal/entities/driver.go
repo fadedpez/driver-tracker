@@ -5,10 +5,10 @@ import (
 )
 
 type Driver struct {
-	FirstName   string `json:"first_name"`
-	LastName    string `json:"last_name"`
-	Number      string `json:"driver_number"`
-	Nationality string `json:"driver_nationality"`
+	FirstName   string `dynamodbav:"first_name"`
+	LastName    string `dynamodbav:"last_name"`
+	Number      string `dynamodbav:"driver_number"`
+	Nationality string `dynamodbav:"driver_nationality"`
 	dob         *time.Time
-	ID          string `json:"id"`
+	ID          string `dynamodbav:"id"`
 }

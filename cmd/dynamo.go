@@ -106,7 +106,7 @@ func init() {
 	cabraCmd.Flags().StringP("environment", "v", "local", "Environment")
 	_ = viper.BindPFlag("cabra.environment", cabraCmd.Flags().Lookup("environment"))
 
-	cabraCmd.Flags().BoolP("delete-existing", "d", false, "Delete existing table if exists")
+	cabraCmd.Flags().BoolP("delete-existing", "d", true, "Delete existing table if exists")
 	_ = viper.BindPFlag("cabra.delete-existing", cabraCmd.Flags().Lookup("delete-existing"))
 	_ = viper.BindEnv("cabra.delete-existing", "DELETE_EXISTING")
 }

@@ -4,5 +4,4 @@ resources:
     parameters:
       Attribute1Name: id
       Attribute1Type: 'S'
-      Attribute4Type: 'S'
       TableHashKeyName: id
