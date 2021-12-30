@@ -33,10 +33,17 @@ var serverCommand = &cobra.Command{
 		if err != nil {
 			log.Fatal("drivers.new dynamo, shit broke without red squigglies. ", err)
 		}
+		teamRepo, err := teams.NewDynamo(&teams.DynamoConfig{
+			Client:    newDynamoClient(),
+			TableName: "driver-tracker-local-Teams",
+		})
+		if err != nil {
+			log.Fatal("drivers.new dynamo, shit broke without red squigglies. ", err)
+		}
 
 		handler, err := handlers.NewAlpha(&handlers.AlphaConfig{
 			DriverRepo: repo,
-			TeamRepo:   &teams.MockRepo{},
+			TeamRepo:   teamRepo,
 		})
 		if err != nil {
 			log.Fatal("err returned from handlers.NewAlpha()", err)

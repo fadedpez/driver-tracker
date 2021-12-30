@@ -5,3 +5,9 @@ resources:
       Attribute1Name: id
       Attribute1Type: 'S'
       TableHashKeyName: id
+  Teams:
+    type: dynamo
+    parameters:
+      Attribute1Name: id
+      Attribute1Type: 'S'
+      TableHashKeyName: id

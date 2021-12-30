@@ -1,9 +1,9 @@
 package entities
 
 type Team struct {
-	Name            string `json:"team_name"`
-	Nationality     string `json:"team_nationality"`
-	Principal       string `json:"team_principal"`
-	EstablishedYear string `json:"team_established_year"`
-	ID              string `json:"id"`
+	Name            string `dynamodbav:"team_name"`
+	Nationality     string `dynamodbav:"team_nationality"`
+	Principal       string `dynamodbav:"team_principal"`
+	EstablishedYear string `dynamodbav:"team_established_year"`
+	ID              string `dynamodbav:"id"`
 }

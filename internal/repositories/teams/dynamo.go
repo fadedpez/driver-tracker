@@ -52,14 +52,14 @@ func NewDynamo(cfg *DynamoConfig) (*Dynamo, error) {
 	}, nil
 }
 
-func (r *Dynamo) CreateTeam(team *entities.Team) (*entities.Team, error) {
+func (r *Dynamo) CreateTeam(ctx context.Context, team *entities.Team) (*entities.Team, error) {
 	if team == nil {
 		return nil, errors.New(teamRepoRequired)
 	}
 
 	team.ID = r.uuidGenerator.New()
 
-	_, err := r.client.PutItem(context.Background(), r.tableName,
+	_, err := r.client.PutItem(ctx, r.tableName,
 		putitem.WithEntity(team))
 	if err != nil {
 		return nil, err
@@ -89,4 +89,8 @@ func (r *Dynamo) GetTeam(ctx context.Context, teamID string) (*entities.Team, er
 	}
 
 	return team, nil
+}
+
+func (r *Dynamo) SearchTeamByName(ctx context.Context, name string) ([]*entities.Team, error) {
+	return nil, errors.New("not yet implemented")
 }

@@ -1,4 +1,4 @@
-DYNAMODBLOCAL_DIR ?= ~/dynamodblocal
+DYNAMODBLOCAL_DIR ?= ~/Downloads/dynamodb_local_latest
 
 build:
 	go build
@@ -15,8 +15,4 @@ coverage:
 	rm coverage.out
 
 dynamo:
-	docker run \
-		-p 8000:8000 \
-		-v $(DYNAMODBLOCAL_DIR)/data:/home/dynamodblocal/data \
-		amazon/dynamodb-local \
-		-jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data/
+	java -Djava.library.path=$(DYNAMODBLOCAL_DIR)/DynamoDBLocal_lib -jar $(DYNAMODBLOCAL_DIR)/DynamoDBLocal.jar -sharedDb

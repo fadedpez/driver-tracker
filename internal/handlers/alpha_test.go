@@ -195,6 +195,8 @@ func TestAlpha_StoreDriver(t *testing.T) {
 }
 
 func TestAlpha_StoreTeam(t *testing.T) {
+	ctx := context.Background()
+
 	t.Run("it calls the repository properly", func(t *testing.T) {
 		handler := setupFixture()
 		m := handler.teamRepo.(*teams.MockRepo)
@@ -214,9 +216,9 @@ func TestAlpha_StoreTeam(t *testing.T) {
 			ID:              "0",
 		}
 
-		m.On("CreateTeam", expTeam).Return(retTeam, nil)
+		m.On("CreateTeam", ctx, expTeam).Return(retTeam, nil)
 
-		actual, err := handler.StoreTeam(context.Background(), &protos.StoreTeamRequest{
+		actual, err := handler.StoreTeam(ctx, &protos.StoreTeamRequest{
 			TeamName:            "beer camp",
 			TeamNationality:     "USA",
 			TeamPrincipal:       "mongo",
@@ -242,7 +244,7 @@ func TestAlpha_StoreTeam(t *testing.T) {
 
 		expErr := errors.New(teamName)
 
-		actual, err := handler.StoreTeam(context.Background(), &protos.StoreTeamRequest{
+		actual, err := handler.StoreTeam(ctx, &protos.StoreTeamRequest{
 			TeamName: "",
 		})
 
@@ -256,7 +258,7 @@ func TestAlpha_StoreTeam(t *testing.T) {
 
 		expErr := errors.New(teamNationality)
 
-		actual, err := handler.StoreTeam(context.Background(), &protos.StoreTeamRequest{
+		actual, err := handler.StoreTeam(ctx, &protos.StoreTeamRequest{
 			TeamName:        "beer camp",
 			TeamNationality: "",
 		})
@@ -271,7 +273,7 @@ func TestAlpha_StoreTeam(t *testing.T) {
 
 		expErr := errors.New(teamPrincipal)
 
-		actual, err := handler.StoreTeam(context.Background(), &protos.StoreTeamRequest{
+		actual, err := handler.StoreTeam(ctx, &protos.StoreTeamRequest{
 			TeamName:        "beer camp",
 			TeamNationality: "USA",
 			TeamPrincipal:   "",
@@ -287,7 +289,7 @@ func TestAlpha_StoreTeam(t *testing.T) {
 
 		expErr := errors.New(teamEstablished)
 
-		actual, err := handler.StoreTeam(context.Background(), &protos.StoreTeamRequest{
+		actual, err := handler.StoreTeam(ctx, &protos.StoreTeamRequest{
 			TeamName:            "beer camp",
 			TeamNationality:     "USA",
 			TeamPrincipal:       "mongo",
@@ -302,6 +304,8 @@ func TestAlpha_StoreTeam(t *testing.T) {
 }
 
 func TestAlpha_SearchTeamByName(t *testing.T) {
+	ctx := context.Background()
+
 	t.Run("it can search the team by name", func(t *testing.T) {
 		handler := setupFixture()
 		m := handler.teamRepo.(*teams.MockRepo)
@@ -314,11 +318,11 @@ func TestAlpha_SearchTeamByName(t *testing.T) {
 			ID:              "0",
 		}
 
-		m.On("SearchTeamByName", retTeam.Name).Return([]*entities.Team{
+		m.On("SearchTeamByName", ctx, retTeam.Name).Return([]*entities.Team{
 			retTeam,
 		}, nil)
 
-		actual, err := handler.SearchTeamByName(context.Background(), &protos.SearchTeamByNameRequest{
+		actual, err := handler.SearchTeamByName(ctx, &protos.SearchTeamByNameRequest{
 			TeamName: "beer camp",
 		})
 
@@ -343,9 +347,9 @@ func TestAlpha_SearchTeamByName(t *testing.T) {
 		testTeamName := "camp beer"
 		expError := errors.New(teamNotFound)
 
-		m.On("SearchTeamByName", testTeamName).Return(nil, expError)
+		m.On("SearchTeamByName", ctx, testTeamName).Return(nil, expError)
 
-		actual, err := handler.SearchTeamByName(context.Background(), &protos.SearchTeamByNameRequest{
+		actual, err := handler.SearchTeamByName(ctx, &protos.SearchTeamByNameRequest{
 			TeamName: testTeamName,
 		})
 
@@ -357,6 +361,8 @@ func TestAlpha_SearchTeamByName(t *testing.T) {
 }
 
 func (a *Alpha) Test_GetTeam(t testing.T) {
+	ctx := context.Background()
+
 	t.Run("it can return a team based on the given team ID", func(t *testing.T) {
 		handler := setupFixture()
 		m := handler.teamRepo.(*teams.MockRepo)
@@ -369,9 +375,9 @@ func (a *Alpha) Test_GetTeam(t testing.T) {
 			ID:              "0",
 		}
 
-		m.On("GetTeam", retTeam.ID).Return(retTeam, nil)
+		m.On("GetTeam", ctx, retTeam.ID).Return(retTeam, nil)
 
-		actual, err := handler.GetTeam(context.Background(), &protos.GetTeamRequest{
+		actual, err := handler.GetTeam(ctx, &protos.GetTeamRequest{
 			TeamID: "0",
 		})
 
@@ -396,9 +402,9 @@ func (a *Alpha) Test_GetTeam(t testing.T) {
 		testTeamID := "1"
 		expError := errors.New(teamNotFound)
 
-		m.On("GetTeam", testTeamID).Return(nil, expError)
+		m.On("GetTeam", ctx, testTeamID).Return(nil, expError)
 
-		actual, err := handler.GetTeam(context.Background(), &protos.GetTeamRequest{
+		actual, err := handler.GetTeam(ctx, &protos.GetTeamRequest{
 			TeamID: testTeamID,
 		})
 

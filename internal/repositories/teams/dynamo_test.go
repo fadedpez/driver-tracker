@@ -12,7 +12,6 @@ import (
 	"github.com/fadedpez/driver-tracker/internal/common"
 	"github.com/fadedpez/driver-tracker/internal/entities"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
 func setupFixture() *Dynamo {
@@ -58,6 +57,8 @@ func TestDynamo_GetTeam(t *testing.T) {
 }
 
 func TestDynamo_CreateTeam(t *testing.T) {
+	ctx := context.Background()
+
 	t.Run("it calls the client properly", func(t *testing.T) {
 		repo := setupFixture()
 		m := repo.client.(*dynamo.Mock)
@@ -76,9 +77,9 @@ func TestDynamo_CreateTeam(t *testing.T) {
 
 		options := putitem.NewOptions(putitem.WithEntity(inputTeam))
 
-		m.On("PutItem", mock.Anything, "test_table", options).Return(&putitem.Result{}, nil)
+		m.On("PutItem", ctx, "test_table", options).Return(&putitem.Result{}, nil)
 
-		actual, err := repo.CreateTeam(&entities.Team{
+		actual, err := repo.CreateTeam(ctx, &entities.Team{
 			Name:            "beer camp",
 			Nationality:     "USA",
 			Principal:       "mongo",

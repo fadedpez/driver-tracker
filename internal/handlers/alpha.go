@@ -118,7 +118,7 @@ func (a *Alpha) StoreTeam(ctx context.Context, req *protos.StoreTeamRequest) (*p
 		return nil, errors.New(teamEstablished)
 	}
 
-	team, err := a.teamRepo.CreateTeam(&entities.Team{
+	team, err := a.teamRepo.CreateTeam(ctx, &entities.Team{
 		Name:            req.TeamName,
 		Nationality:     req.TeamNationality,
 		Principal:       req.TeamPrincipal,
@@ -141,7 +141,7 @@ func (a *Alpha) SearchTeamByName(ctx context.Context, req *protos.SearchTeamByNa
 		return nil, errors.New(teamName)
 	}
 
-	team, err := a.teamRepo.SearchTeamByName(req.TeamName)
+	team, err := a.teamRepo.SearchTeamByName(ctx, req.TeamName)
 	if err != nil {
 		return nil, err
 	}
@@ -174,7 +174,7 @@ func (a *Alpha) GetTeam(ctx context.Context, req *protos.GetTeamRequest) (*proto
 		return nil, errors.New(teamIDNotFound)
 	}
 
-	team, err := a.teamRepo.GetTeam(req.TeamID)
+	team, err := a.teamRepo.GetTeam(ctx, req.TeamID)
 	if err != nil {
 		return nil, err
 	}
@@ -204,7 +204,28 @@ func teamToProto(team *entities.Team) *protos.Team {
 //TODO: Probably have to create (x)ToProto / (x)ToProtos for Driver, GrandPrix, Quali, Round, Season, Track
 
 func (a *Alpha) GetDriver(ctx context.Context, req *protos.GetDriverRequest) (*protos.GetDriverResponse, error) {
-	return nil, errors.New("not yet implemented")
+	if req == nil {
+		return nil, errors.New(requiredReq)
+	}
+
+	if req.Id == "" {
+		return nil, errors.New("GetDriverRequest.ID is empty")
+	}
+
+	driver, err := a.driverRepo.GetDriver(ctx, req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &protos.GetDriverResponse{ //TODO: turn this into a function like teams
+		Driver: &protos.Driver{
+			Id:                driver.ID,
+			NameLast:          driver.LastName,
+			NameFirst:         driver.FirstName,
+			DriverNumber:      driver.Number,
+			DriverNationality: driver.Nationality,
+		},
+	}, nil
 }
 
 func (a *Alpha) SearchDriver(ctx context.Context, req *protos.SearchDriverRequest) (*protos.SearchDriverResponse, error) {

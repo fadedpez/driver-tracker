@@ -39,6 +39,7 @@ AWS_ENDPOINT=http://localhost:8000 AWS_REGION=us-east-1 DELETE_EXISTING=true dyn
 		}
 
 		fmt.Println(inputs)
+		fmt.Printf("length of inputs: %d", len(inputs))
 
 		endpoint := viper.GetString("cabra.endpoint")
 		region := viper.GetString("cabra.region")

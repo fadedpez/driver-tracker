@@ -13,7 +13,7 @@ var testCommand = &cobra.Command{
 	Use:   "test",
 	Short: "Run the gRPC server",
 
-	Run: func(comd *cobra.Command, args []string) {
+	Run: func(cmd *cobra.Command, args []string) {
 		conn, err := grpc.Dial("localhost:5000",
 			grpc.WithInsecure())
 		if err != nil {
@@ -27,6 +27,20 @@ var testCommand = &cobra.Command{
 		}(conn)
 		client := protos.NewDriverTrackerAPIClient(conn)
 
+		teamResponse, err := client.StoreTeam(context.Background(), &protos.StoreTeamRequest{
+			TeamName:            "beer camp",
+			TeamNationality:     "USA",
+			TeamPrincipal:       "mongo",
+			TeamEstablishedYear: "2015",
+			TeamYearsActive:     "6",
+		})
+		if err != nil {
+			log.Println("store team returned error. ", err)
+			return
+		}
+
+		log.Println("store team was successful. ", teamResponse)
+
 		response, err := client.StoreDriver(context.Background(), &protos.StoreDriverRequest{
 			NameLast:          "kirk",
 			NameFirst:         "diggler",
@@ -34,11 +48,19 @@ var testCommand = &cobra.Command{
 			DriverNationality: "USA",
 		})
 		if err != nil {
-			log.Println("error returned", err)
+			log.Println("store driver returned error. ", err)
 			return
 		}
 
-		log.Println("return successfully", response)
+		log.Println("create driver returned successfully. ", response)
+
+		getResponse, err := client.GetDriver(context.Background(), &protos.GetDriverRequest{Id: response.Driver.Id})
+		if err != nil {
+			log.Println("get driver returned an error. ", err)
+			return
+		}
+
+		log.Print("get driver was successful. ", getResponse)
 	},
 }
 
